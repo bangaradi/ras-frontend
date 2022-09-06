@@ -14,6 +14,7 @@ import GroupsIcon from "@mui/icons-material/Groups";
 import ApartmentIcon from "@mui/icons-material/Apartment";
 import QuestionMarkIcon from "@mui/icons-material/QuestionMark";
 import StarsIcon from "@mui/icons-material/Stars";
+import People from "@mui/icons-material/People";
 
 import useStore from "@store/store";
 import companyRequest from "@callbacks/company/company";
@@ -46,6 +47,7 @@ export interface userItems {
   avatar: JSX.Element;
   name: string;
   id: string;
+  hidden?: boolean;
 }
 interface layoutings {
   [key: string]: React.ComponentType<{
@@ -95,7 +97,7 @@ function LayoutWrapper({ children }: { children: JSX.Element }) {
   useEffect(() => {
     const getCompany = async () => {
       const response = await companyRequest.get(token);
-      if (response.name === "error401" && response.email === "error.401") {
+      if (response.name === "error401" && response.email === "error401") {
         router.push("/login");
         setToken("");
       }
@@ -145,7 +147,7 @@ function LayoutWrapper({ children }: { children: JSX.Element }) {
 
     const getAdmin = async () => {
       const response = await whoami.get(token);
-      if (response.name === "error401" && response.user_id === "error.401") {
+      if (response.name === "error401" && response.user_id === "error401") {
         router.push("/login");
         setToken("");
       }
@@ -273,6 +275,11 @@ function LayoutWrapper({ children }: { children: JSX.Element }) {
           name: "Stats",
           id: "/stats",
         },
+        {
+          avatar: <QuestionMarkIcon />,
+          name: "Enrollment Questions",
+          id: "/enroll",
+        },
       ],
       extra: [
         {
@@ -296,8 +303,13 @@ function LayoutWrapper({ children }: { children: JSX.Element }) {
       userData: [
         {
           avatar: <PieChartIcon />,
-          name: "Overview",
+          name: "Recruitment Drives",
           id: "",
+        },
+        {
+          avatar: <People />,
+          name: "Registered HRs",
+          id: "/hr",
         },
       ],
       extra: [
@@ -384,7 +396,7 @@ function LayoutWrapper({ children }: { children: JSX.Element }) {
               id: "/company",
             }
           : // eslint-disable-next-line react/jsx-no-useless-fragment
-            { avatar: <></>, name: "", id: "" },
+            { avatar: <></>, name: "", id: "", hidden: true },
         role === 100 || role === 101
           ? {
               avatar: <BarChartIcon />,
@@ -392,7 +404,7 @@ function LayoutWrapper({ children }: { children: JSX.Element }) {
               id: "/users",
             }
           : // eslint-disable-next-line react/jsx-no-useless-fragment
-            { avatar: <></>, name: "", id: "" },
+            { avatar: <></>, name: "", id: "", hidden: true },
       ],
       extra: [
         {
